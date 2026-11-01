@@ -1,295 +1,294 @@
 (() => {
   'use strict';
 
-  const WORD_BANK = `the of and a to in is you that it he was for on are as with his they I at be this have from or one had by word but not what all were we when your can said there use an each which she do how their if will up other about out many then them these so some her would make like him into time has look two more write go see number no way could people my than first water been call who oil its now find long down day did get come made may part over new sound take only little work know place years live me back give most very after thing our just name good sentence man think say great where help through much before line right too means old any same tell boy follow came want show also around form three small set put end does another well large must big even such because turn here why ask went men read need land different home move try kind hand picture again change off play spell air away animal house point page letter mother answer found study still learn should world high every near add food between own below country plant last school father keep tree never start city earth eye light thought head under story saw left few while along might close something seem next hard open example begin life always those both paper together got group often run important until children side feet car mile night walk white sea began grow took river four carry state once book hear stop without second late miss idea enough eat face watch far Indian real almost let above girl sometimes mountain cut young talk soon list song being leave family it's body music color stand sun questions fish area mark dog horse birds problem complete room knew since ever piece told usually friends easy heard order red door sure become top ship across today during short better best however low hour black products happen whole measure remember early waves reached listen wind rock space covered fast several hold himself toward five step morning passed vowel true hundred against pattern numerals table north slow money map farm pulled draw voice seen cold cried plan notice south sing war ground fall king town I'll unit figure certain field travel wood fire upon done English road half ten fly gave box finally wait correct oh quickly person became shown minutes strong verb stars front feel fact inches street decided contain course surface produce building ocean class note nothing rest carefully scientists inside wheels stay green known island week less machine base ago stood plane system behind ran round boat game force brought understand warm common bring explain dry though language shape deep thousands yes clear equation yet government filled heat full hot check object am rule among noun power cannot able six size dark ball material special heavy fine pair circle include built can't matter square syllables perhaps bill felt suddenly test direction center farmers ready anything divided general energy subject Europe moon region return believe dance members picked simple cells paint mind love cause rain exercise eggs train blue wish drop developed window difference distance heart sit sum summer wall forest probably legs sat main winter wide written length reason kept interest arms brother race present beautiful store job edge past sign record finished discovered wild happy beside gone sky glass million west lay weather root instruments meet third months paragraph raised represent soft whether clothes flowers shall teacher held describe drive cross speak solve appear metal son either ice sleep village factors results jumped snow ride care floor hill pushed baby buy century outside everything tall already instead phrase soil bed copy free hope spring case laughed nation quite type themselves temperature bright lead everyone method section lake iron within dictionary hair age amount scale pounds although per broken moment tiny possible gold milk quiet natural lot stone act build middle speed count rule company mind cotton oxygen farmer sense stick serve appear properties exact region decimals lake headers student order modern element bottom jumped me`.trim().split(/\s+/);
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+  const input = $('#typing-input');
+  const typingArea = $('#typing-area');
+  const typingText = $('#typing-text');
+  const overlay = $('#finished-overlay');
+  const progressRail = $('.progress-rail');
+  const durations = [15, 30, 60, 120];
+  const STORAGE_KEY = 'keyflow-settings-v3';
 
+  const WORD_BANK = `about above across act action actually add after again against age ago agree air all allow almost alone along already also although always among amount an and animal another answer any appear apply area arm around art as ask at away back bad base be beautiful because become bed before begin best better between big bird black body book both box boy bring build business but buy call can car care carry case cause cell center century certain change check child choice city class clear close cold color come common company complete consider continue control cook copy course create cross cut dark data day decide develop did differ direct discover do does dog door down draw dream drive during each early earth ease east easy effect effort eight either end enjoy enough enter equal especially even event ever every example experience explain eye face fact fair fall family far fast father feel few field figure fill film final find fine first fish five floor flow focus follow food for force form found four free friend from front full game garden general get girl give glass go good great green ground group grow guess hand happen happy hard have he head health hear heart heavy help her here high him his history hold home hope horse hour house how however human idea if imagine important improve in include increase indeed inside instead interest into issue item its itself job join just keep kind know land language large last late learn least leave left less let level life light like line list little live long look lose lot love low machine made main make man many map mark matter may mean measure meet member memory mention middle mind minute miss moment money month more morning most mother move much music must name nation nature near necessary need never new next night no nor north note notice number object observe obvious occur ocean odd of off offer office often oil old on once one only open opinion opportunity order other our out over own page paper parent part particular pass past pattern pay peace people per perhaps person phone photo pick picture place plan play point possible practice prepare present press pretty price problem process produce product project prove provide public pull put quality question quick quickly quiet quite race radio rain raise range rate rather reach read ready real reason receive record red reduce relate remain remember report result return rich right rise river road room rule run same save saw say school science sea second see seem self sense serve set several shape share she short should show side simple since sing single sister sit six size sleep slow small so social soft solution some sort sound south space speak special spend spring stand start state stay step still stop story street strong study subject such summer support sure surface system table take talk teach team tell ten test than thank that the their them themselves then theory there these they thing think third this those though thought three through time to together too top toward town trade train travel tree true try turn two under understand unit until up upon use usual value very view voice wait walk wall want war warm was watch water way we wear week well west what when where whether which while white who whole why wide wife wild will win wind window winter wish with without woman wonder word work world worry would write wrong year yes yet you young your`.split(/\s+/);
   const QUOTES = [
-    'Progress is rarely loud. It is the quiet decision to return, pay attention, and make one small thing a little better than it was yesterday. Stay curious, be patient with the process, and let consistency do the work.',
-    'A good rhythm is not about moving as fast as possible. It is about finding a pace you can trust, keeping your attention on the next step, and making fewer mistakes as the work becomes familiar.',
-    'Give yourself room to learn. The first attempt is for understanding, the next is for practice, and every attempt after that is a chance to notice what has changed and keep moving forward.',
-    'Focus grows when distractions get smaller. Set a clear goal, begin before you feel completely ready, and give the task your full attention for a little while. Small sessions can create lasting habits.',
-    'The best tools are the ones that help you spend less energy getting started and more energy doing the work. Keep your setup simple, your goals realistic, and your practice regular.'
+    'Great things are done by a series of small things brought together.',
+    'It always seems impossible until it is done.',
+    'The secret of getting ahead is getting started.',
+    'Well done is better than well said.',
+    'What we do every day matters more than what we do once in a while.',
+    'Simplicity boils down to two steps: identify the essential, eliminate the rest.',
+    'Nothing will work unless you do.',
+    'The beginning is the most important part of the work.',
+    'Success is the sum of small efforts, repeated day in and day out.',
+    'Make each day your masterpiece.',
+    'First, solve the problem. Then, write the code.',
+    'The secret of concentration is the secret of self-discovery.'
   ];
-
   const CODE_SNIPPETS = [
-    `function calculateAverage(numbers) {\n  if (numbers.length === 0) return 0;\n  const total = numbers.reduce((sum, value) => sum + value, 0);\n  return total / numbers.length;\n}\n\nconsole.log(calculateAverage([4, 8, 12]));`,
-    `const createUser = (name, role = 'reader') => ({\n  id: crypto.randomUUID(),\n  name: name.trim(),\n  role,\n  active: true,\n});\n\nconst user = createUser('Alex', 'editor');`,
-    `for (let index = 0; index < items.length; index += 1) {\n  const item = items[index];\n  if (item.isReady) {\n    renderItem(item);\n  } else {\n    queueItem(item);\n  }\n}`, 
-    `class Timer {\n  constructor(duration) {\n    this.duration = duration;\n    this.remaining = duration;\n  }\n\n  reset() {\n    this.remaining = this.duration;\n  }\n}`
+    'const average = (values) => {\n  if (!values.length) return 0;\n  return values.reduce((sum, value) => sum + value, 0) / values.length;\n};',
+    'function greet(name) {\n  const message = `Hello, ${name}`;\n  return message.trim();\n}',
+    'const settings = {\n  theme: "dark",\n  duration: 30,\n  sound: false,\n};',
+    'for (const item of items) {\n  if (item.active) {\n    results.push(item.value);\n  }\n}',
+    'const clamp = (value, min, max) =>\n  Math.min(Math.max(value, min), max);',
+    'async function loadProfile(userId) {\n  const response = await fetch(`/api/users/${userId}`);\n  if (!response.ok) throw new Error("Request failed");\n  return response.json();\n}',
+    'const unique = [...new Set(numbers)];\nconst sorted = unique.sort((a, b) => a - b);\nconsole.log(sorted);'
   ];
-
-  const el = (id) => document.getElementById(id);
-  const input = el('typing-input');
-  const typingArea = el('typing-area');
-  const typingText = el('typing-text');
-  const overlay = el('finished-overlay');
-  const durationOptions = [15, 30, 60, 120];
 
   let mode = 'words';
   let duration = 30;
   let targetText = '';
   let typedText = '';
-  let lastQuoteIndex = -1;
-  let lastCodeOrderKey = '';
+  let startTime = null;
+  let timerId = null;
+  let running = false;
+  let finished = false;
   let totalKeypresses = 0;
   let correctKeypresses = 0;
   let mistakes = 0;
-  let startTime = null;
-  let timerId = null;
-  let isRunning = false;
-  let isFinished = false;
-  let lastWpm = 0;
   let toastTimeout = null;
+  const PROMPT_STORAGE_KEY = 'keyflow-last-prompts-v1';
 
-  const STORAGE_KEY = 'keyflow-settings-v1';
-  let saved = {};
-  try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; } catch (_) { saved = {}; }
-
-  if (saved.theme === 'dark') document.body.classList.add('dark-theme');
-  if (durationOptions.includes(Number(saved.duration))) duration = Number(saved.duration);
-  if (['words', 'quotes', 'code'].includes(saved.mode)) mode = saved.mode;
-
-  function saveSettings() {
+  function readLastPrompt(key) {
     try {
-      const current = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {};
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...current, mode, duration, theme: document.body.classList.contains('dark-theme') ? 'dark' : 'light' }));
-    } catch (_) { /* The site still works when browser storage is unavailable. */ }
+      const prompts = JSON.parse(localStorage.getItem(PROMPT_STORAGE_KEY) || '{}') || {};
+      return typeof prompts[key] === 'string' ? prompts[key] : '';
+    } catch (_) { return ''; }
+  }
+  function saveLastPrompt(key, value) {
+    try {
+      const prompts = JSON.parse(localStorage.getItem(PROMPT_STORAGE_KEY) || '{}') || {};
+      prompts[key] = value;
+      localStorage.setItem(PROMPT_STORAGE_KEY, JSON.stringify(prompts));
+    } catch (_) { /* Prompt randomisation still works without storage. */ }
   }
 
-  function getText() {
-    if (mode === 'quotes') {
-      // Avoid showing the same quote twice in a row, including after a restart
-      // or when the user chooses a different test duration.
-      let quoteIndex = Math.floor(Math.random() * QUOTES.length);
-      if (QUOTES.length > 1 && quoteIndex === lastQuoteIndex) {
-        quoteIndex = (quoteIndex + 1 + Math.floor(Math.random() * (QUOTES.length - 1))) % QUOTES.length;
-      }
-      lastQuoteIndex = quoteIndex;
-      const quote = QUOTES[quoteIndex];
-      return (quote + ' ' + quote + ' ' + quote).replace(/\s+/g, ' ');
+  const settings = readSettings();
+  if (settings.theme === 'dark') document.body.classList.add('dark-theme');
+  if (durations.includes(Number(settings.duration))) duration = Number(settings.duration);
+  if (['words', 'quotes', 'code'].includes(settings.mode)) mode = settings.mode;
+
+  function readSettings() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; }
+    catch (_) { return {}; }
+  }
+  function saveSettings() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        mode,
+        duration,
+        theme: document.body.classList.contains('dark-theme') ? 'dark' : 'light'
+      }));
+    } catch (_) { /* Local storage is optional. */ }
+  }
+  function chooseDifferent(list, previous) {
+    if (list.length < 2) return list[0] || '';
+    let picked = list[Math.floor(Math.random() * list.length)];
+    for (let tries = 0; picked === previous && tries < 6; tries += 1) {
+      picked = list[Math.floor(Math.random() * list.length)];
     }
-    if (mode === 'code') {
-      // Fisher-Yates gives each code-prompt ordering a fair shuffle. If the
-      // same ordering comes up twice, rotate it to guarantee a new prompt.
-      const snippets = [...CODE_SNIPPETS];
-      for (let i = snippets.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [snippets[i], snippets[j]] = [snippets[j], snippets[i]];
-      }
-      let orderKey = snippets.join('\u0000');
-      if (snippets.length > 1 && orderKey === lastCodeOrderKey) {
-        snippets.push(snippets.shift());
-        orderKey = snippets.join('\u0000');
-      }
-      lastCodeOrderKey = orderKey;
-      return snippets.join('\n\n');
-    }
+    return picked === previous ? list[(list.indexOf(picked) + 1) % list.length] : picked;
+  }
+  function randomWords(count) {
     const words = [];
-    let previous = -1;
-    const targetLength = 220;
-    for (let i = 0; i < targetLength; i += 1) {
-      let index = Math.floor(Math.random() * WORD_BANK.length);
-      if (WORD_BANK.length > 1 && index === previous) index = (index + 1) % WORD_BANK.length;
-      previous = index;
-      words.push(WORD_BANK[index]);
+    let previous = '';
+    for (let i = 0; i < count; i += 1) {
+      let word = WORD_BANK[Math.floor(Math.random() * WORD_BANK.length)];
+      if (word === previous) word = WORD_BANK[(WORD_BANK.indexOf(word) + 29) % WORD_BANK.length];
+      words.push(word);
+      previous = word;
     }
     return words.join(' ');
   }
-
-  function renderTarget() {
-    const fragment = document.createDocumentFragment();
-    for (let i = 0; i < targetText.length; i += 1) {
-      const char = document.createElement('span');
-      char.className = 'char';
-      char.dataset.index = String(i);
-      char.textContent = targetText[i];
-      fragment.appendChild(char);
+  function makePrompt() {
+    if (mode === 'quotes') {
+      const quote = chooseDifferent(QUOTES, readLastPrompt(mode));
+      saveLastPrompt(mode, quote);
+      return (quote + ' ' + quote + ' ' + quote).replace(/\s+/g, ' ');
     }
-    typingText.replaceChildren(fragment);
-    updateTextMarks();
-  }
-
-  function updateTextMarks() {
-    const chars = typingText.children;
-    const length = Math.min(typedText.length, chars.length);
-    for (let i = 0; i < length; i += 1) {
-      const char = chars[i];
-      char.classList.toggle('correct', typedText[i] === targetText[i]);
-      char.classList.toggle('incorrect', typedText[i] !== targetText[i]);
-      char.classList.remove('current');
+    if (mode === 'code') {
+      const ordered = [...CODE_SNIPPETS];
+      for (let i = ordered.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [ordered[i], ordered[j]] = [ordered[j], ordered[i]];
+      }
+      let result = ordered.join('\n\n');
+      if (result === readLastPrompt(mode)) result = ordered.slice(1).concat(ordered[0]).join('\n\n');
+      saveLastPrompt(mode, result);
+      return result;
     }
-    for (let i = length; i < chars.length; i += 1) {
-      chars[i].classList.remove('correct', 'incorrect', 'current');
-    }
-    if (length < chars.length) chars[length].classList.add('current');
-    // Keep the new target passage visible immediately, even before typing starts.
-    typingText.style.display = 'block';
+    let result = randomWords(240);
+    if (result === readLastPrompt(mode)) result = randomWords(240);
+    saveLastPrompt(mode, result);
+    return result;
   }
-
-  function getCorrectCurrentChars() {
-    let total = 0;
-    for (let i = 0; i < typedText.length && i < targetText.length; i += 1) {
-      if (typedText[i] === targetText[i]) total += 1;
-    }
-    return total;
-  }
-
-  function elapsedSeconds() {
-    if (!startTime) return 0;
-    return Math.min(duration, (performance.now() - startTime) / 1000);
-  }
-
-  function updateStats() {
-    const elapsed = elapsedSeconds();
-    const correctChars = getCorrectCurrentChars();
-    const minutes = elapsed / 60;
-    const wpm = Math.round((correctChars / 5) / Math.max(minutes, 1 / 60));
-    const accuracy = totalKeypresses > 0 ? Math.round((correctKeypresses / totalKeypresses) * 100) : 100;
-    el('wpm-value').textContent = String(wpm);
-    el('accuracy-value').textContent = String(Math.max(0, Math.min(100, accuracy)));
-    el('characters-value').textContent = String(correctChars);
-    el('mistakes-value').textContent = String(mistakes);
-    el('time-label').textContent = formatTime(Math.max(0, duration - elapsed));
-    el('progress-fill').style.width = `${Math.min(100, (elapsed / duration) * 100)}%`;
-    lastWpm = wpm;
-    return { wpm, accuracy, correctChars, elapsed };
-  }
-
   function formatTime(value) {
     const seconds = Math.max(0, Math.ceil(value));
-    const minutesPart = Math.floor(seconds / 60);
-    const secondsPart = seconds % 60;
-    return `${String(minutesPart).padStart(2, '0')}:${String(secondsPart).padStart(2, '0')}`;
+    return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
   }
-
+  function correctCharacterCount() {
+    let count = 0;
+    for (let i = 0; i < typedText.length && i < targetText.length; i += 1) {
+      if (typedText[i] === targetText[i]) count += 1;
+    }
+    return count;
+  }
+  function currentElapsed() {
+    if (startTime === null) return 0;
+    return Math.min(duration, (performance.now() - startTime) / 1000);
+  }
+  function calculateStats() {
+    const elapsed = currentElapsed();
+    const correctChars = correctCharacterCount();
+    const wpm = elapsed > 0 ? Math.round((correctChars / 5) / (Math.max(elapsed, 1) / 60)) : 0;
+    const accuracy = totalKeypresses ? Math.round((correctKeypresses / totalKeypresses) * 100) : 100;
+    return { elapsed, correctChars, wpm, accuracy: Math.max(0, Math.min(100, accuracy)) };
+  }
+  function renderPrompt() {
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < targetText.length; i += 1) {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.dataset.index = String(i);
+      span.textContent = targetText[i];
+      fragment.appendChild(span);
+    }
+    typingText.replaceChildren(fragment);
+    updateCharacterMarks();
+  }
+  function updateCharacterMarks() {
+    const chars = typingText.children;
+    for (let i = 0; i < chars.length; i += 1) {
+      const node = chars[i];
+      node.classList.remove('correct', 'incorrect', 'current');
+      if (i < typedText.length) node.classList.add(typedText[i] === targetText[i] ? 'correct' : 'incorrect');
+      else if (i === typedText.length && !finished) node.classList.add('current');
+    }
+    const current = chars[Math.min(typedText.length, chars.length - 1)];
+    if (current && typedText.length > 0) {
+      const wrapRect = typingArea.getBoundingClientRect();
+      const charRect = current.getBoundingClientRect();
+      if (charRect.top < wrapRect.top + 10 || charRect.bottom > wrapRect.bottom - 28) {
+        current.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+      }
+    }
+  }
+  function updateStats() {
+    const stats = calculateStats();
+    $('#wpm-value').textContent = String(stats.wpm);
+    $('#accuracy-value').textContent = String(stats.accuracy);
+    $('#characters-value').textContent = String(stats.correctChars);
+    $('#mistakes-value').textContent = String(mistakes);
+    $('#time-label').textContent = formatTime(duration - stats.elapsed);
+    const progress = Math.min(100, (stats.elapsed / duration) * 100);
+    $('#progress-fill').style.width = `${progress}%`;
+    progressRail.setAttribute('aria-valuenow', String(Math.round(progress)));
+    return stats;
+  }
   function startTimer() {
-    if (isRunning || isFinished) return;
-    isRunning = true;
+    if (running || finished) return;
+    running = true;
     startTime = performance.now();
-    el('test-state').textContent = 'SESSION IN PROGRESS';
-    el('live-dot').classList.add('running');
-    el('live-dot').classList.remove('finished');
-    typingText.style.display = 'block';
+    $('#test-state').textContent = 'SESSION IN PROGRESS';
+    $('#state-indicator').classList.add('running');
+    $('#state-indicator').classList.remove('finished');
     timerId = window.setInterval(() => {
       const stats = updateStats();
       if (stats.elapsed >= duration) finishTest();
-    }, 100);
+    }, 80);
   }
+  function handleEdit(nextText) {
+    if (finished) return;
+    if (nextText.length > targetText.length) nextText = nextText.slice(0, targetText.length);
+    if (nextText === typedText) return;
+    if (nextText.length > 0) startTimer();
 
-  function addCharacter(character) {
-    if (isFinished) return;
-    startTimer();
-    if (typedText.length >= targetText.length) {
-      finishTest();
-      return;
+    // Count newly entered characters as key presses; deleting text does not count as a press.
+    if (nextText.length > typedText.length) {
+      const additions = nextText.slice(typedText.length);
+      for (let i = 0; i < additions.length; i += 1) {
+        totalKeypresses += 1;
+        const at = typedText.length + i;
+        if (additions[i] === targetText[at]) correctKeypresses += 1;
+        else mistakes += 1;
+      }
     }
-    const expected = targetText[typedText.length];
-    typedText += character;
-    totalKeypresses += 1;
-    if (character === expected) correctKeypresses += 1;
-    else mistakes += 1;
-    updateTextMarks();
-    updateStats();
-    if (typedText.length >= targetText.length) finishTest();
+    typedText = nextText;
+    input.value = typedText;
+    updateCharacterMarks();
+    const stats = updateStats();
+    if (typedText.length >= targetText.length || stats.elapsed >= duration) finishTest();
   }
-
-  function eraseCharacter() {
-    if (isFinished || typedText.length === 0) return;
-    startTimer();
-    typedText = typedText.slice(0, -1);
-    updateTextMarks();
-    updateStats();
-  }
-
   function finishTest() {
-    if (isFinished) return;
-    isFinished = true;
-    isRunning = false;
+    if (finished) return;
+    finished = true;
+    running = false;
     if (timerId) window.clearInterval(timerId);
     timerId = null;
     const stats = updateStats();
-    const finalWpm = Math.max(0, stats.wpm);
-    el('test-state').textContent = 'SESSION COMPLETE';
-    el('live-dot').classList.remove('running');
-    el('live-dot').classList.add('finished');
-    el('progress-fill').style.width = '100%';
-    el('time-label').textContent = '00:00';
-    overlay.hidden = false;
-    input.blur();
+    $('#test-state').textContent = 'SESSION COMPLETE';
+    $('#state-indicator').classList.remove('running');
+    $('#state-indicator').classList.add('finished');
+    $('#progress-fill').style.width = '100%';
+    progressRail.setAttribute('aria-valuenow', '100');
+    $('#time-label').textContent = '00:00';
+    $('#final-wpm').innerHTML = `${stats.wpm} <small>WPM</small>`;
+    $('#final-accuracy').innerHTML = `${stats.accuracy}<small>%</small>`;
+
     const bestKey = `keyflow-best-${mode}-${duration}`;
     let best = 0;
     try { best = Number(localStorage.getItem(bestKey) || 0); } catch (_) { best = 0; }
-    const isNewBest = finalWpm > best;
-    if (isNewBest) {
-      best = finalWpm;
-      try { localStorage.setItem(bestKey, String(best)); } catch (_) { /* Ignore disabled storage. */ }
+    const newRecord = stats.wpm > best;
+    if (newRecord) {
+      best = stats.wpm;
+      try { localStorage.setItem(bestKey, String(best)); } catch (_) { /* Optional persistence. */ }
     }
     updateBest();
-    el('finish-message').textContent = isNewBest && finalWpm > 0
-      ? `New personal best: ${finalWpm} WPM at ${stats.accuracy}% accuracy.`
-      : `You typed at ${finalWpm} WPM with ${stats.accuracy}% accuracy. ${stats.correctChars} correct characters.`;
-    el('again-button').focus({ preventScroll: true });
+    $('#finish-title').textContent = newRecord && stats.wpm > 0 ? 'A new personal record.' : 'Well practised.';
+    $('#finish-message').textContent = newRecord && stats.wpm > 0
+      ? `Your best is now ${stats.wpm} WPM, with ${stats.accuracy}% accuracy.`
+      : `You typed at ${stats.wpm} WPM with ${stats.accuracy}% accuracy.`;
+    overlay.hidden = false;
+    input.blur();
     saveSettings();
   }
-
   function updateBest() {
-    const bestKey = `keyflow-best-${mode}-${duration}`;
+    const key = `keyflow-best-${mode}-${duration}`;
     let best = 0;
-    try { best = Number(localStorage.getItem(bestKey) || 0); } catch (_) { best = 0; }
-    el('best-value').textContent = best > 0 ? String(best) : '—';
-    el('best-duration-label').textContent = `· ${duration} SECONDS`;
+    try { best = Number(localStorage.getItem(key) || 0); } catch (_) { best = 0; }
+    $('#best-value').textContent = best > 0 ? String(best) : '—';
+    $('#best-duration-label').textContent = `/ ${duration} SEC`;
   }
-
-  function resetTest({ focus = false } = {}) {
+  function resetTest({ focus = false, notify = false } = {}) {
     if (timerId) window.clearInterval(timerId);
     timerId = null;
-    isRunning = false;
-    isFinished = false;
+    running = false;
+    finished = false;
     startTime = null;
     typedText = '';
     totalKeypresses = 0;
     correctKeypresses = 0;
     mistakes = 0;
-    lastWpm = 0;
-    let previousPrompt = targetText;
-    // Remember the previous prompt per practice mode, so a revisit to the site
-    // does not repeat the same saved quote or code ordering immediately.
-    try {
-      previousPrompt = localStorage.getItem(`keyflow-last-prompt-${mode}`) || previousPrompt;
-    } catch (_) { /* The session still works when browser storage is unavailable. */ }
-    let nextPrompt = getText();
-    // Guard against the extremely unlikely chance that a random word prompt
-    // repeats verbatim. Every reset should put a fresh prompt on screen.
-    let retries = 0;
-    while (nextPrompt === previousPrompt && retries < 12) {
-      nextPrompt = getText();
-      retries += 1;
-    }
-    if (nextPrompt === previousPrompt && mode === 'words') {
-      const words = nextPrompt.split(' ');
-      const firstIndex = WORD_BANK.indexOf(words[0]);
-      words[0] = WORD_BANK[(Math.max(0, firstIndex) + 1) % WORD_BANK.length];
-      nextPrompt = words.join(' ');
-    }
-    targetText = nextPrompt;
-    try { localStorage.setItem(`keyflow-last-prompt-${mode}`, targetText); } catch (_) { /* Ignore disabled storage. */ }
+    targetText = makePrompt();
     input.value = '';
     overlay.hidden = true;
-    el('test-state').textContent = 'READY WHEN YOU ARE';
-    el('live-dot').classList.remove('running', 'finished');
-    el('progress-fill').style.width = '0%';
-    el('time-label').textContent = formatTime(duration);
-    el('mode-label').textContent = mode === 'words' ? 'COMMON WORDS' : mode === 'quotes' ? 'ORIGINAL QUOTES' : 'CODE SNIPPETS';
-    renderTarget();
+    $('#test-state').textContent = 'READY WHEN YOU ARE';
+    $('#state-indicator').classList.remove('running', 'finished');
+    $('#progress-fill').style.width = '0%';
+    progressRail.setAttribute('aria-valuenow', '0');
+    $('#time-label').textContent = formatTime(duration);
+    $('#mode-label').textContent = mode === 'words' ? 'COMMON WORDS' : mode === 'quotes' ? 'THOUGHTFUL PASSAGES' : 'CODE PRACTICE';
+    renderPrompt();
     updateStats();
     updateBest();
     if (focus) input.focus({ preventScroll: true });
+    if (notify) showToast('A fresh prompt is ready.');
   }
-
   function setMode(nextMode) {
-    if (!['words', 'quotes', 'code'].includes(nextMode) || nextMode === mode) return;
-    mode = nextMode;
-    document.querySelectorAll('.mode-button').forEach((button) => {
+    if (!['words', 'quotes', 'code'].includes(nextMode)) return;
+    if (nextMode !== mode) mode = nextMode;
+    $$('.mode-switch .segment').forEach((button) => {
       const selected = button.dataset.mode === mode;
       button.classList.toggle('selected', selected);
       button.setAttribute('aria-pressed', String(selected));
@@ -297,17 +296,11 @@
     resetTest();
     saveSettings();
   }
-
   function setDuration(nextDuration) {
     const value = Number(nextDuration);
-    if (!durationOptions.includes(value)) return;
-    // Clicking the already-selected duration also starts a fresh test.
-    if (value === duration) {
-      resetTest();
-      return;
-    }
+    if (!durations.includes(value)) return;
     duration = value;
-    document.querySelectorAll('.duration-button').forEach((button) => {
+    $$('.duration-switch .segment').forEach((button) => {
       const selected = Number(button.dataset.duration) === duration;
       button.classList.toggle('selected', selected);
       button.setAttribute('aria-pressed', String(selected));
@@ -315,94 +308,70 @@
     resetTest();
     saveSettings();
   }
-
   function showToast(message) {
-    const toast = el('toast');
+    const toast = $('#toast');
     toast.textContent = message;
     toast.classList.add('visible');
     if (toastTimeout) window.clearTimeout(toastTimeout);
     toastTimeout = window.setTimeout(() => toast.classList.remove('visible'), 2200);
   }
 
-  document.querySelectorAll('.mode-button').forEach((button) => {
-    button.addEventListener('click', () => setMode(button.dataset.mode));
-  });
-  document.querySelectorAll('.duration-button').forEach((button) => {
-    button.addEventListener('click', () => setDuration(button.dataset.duration));
-  });
-
-  el('restart-button').addEventListener('click', () => {
-    resetTest({ focus: true });
-    showToast('Fresh test ready. Your timer starts when you type.');
-  });
-  el('again-button').addEventListener('click', () => resetTest({ focus: true }));
-  typingArea.addEventListener('click', () => {
-    if (isFinished) return;
-    input.focus({ preventScroll: true });
-  });
+  $$('.mode-switch .segment').forEach((button) => button.addEventListener('click', () => setMode(button.dataset.mode)));
+  $$('.duration-switch .segment').forEach((button) => button.addEventListener('click', () => setDuration(button.dataset.duration)));
+  $('#restart-button').addEventListener('click', () => resetTest({ focus: true, notify: true }));
+  $('#again-button').addEventListener('click', () => resetTest({ focus: true }));
+  typingArea.addEventListener('click', () => { if (!finished) input.focus({ preventScroll: true }); });
   typingArea.addEventListener('keydown', (event) => {
     if (event.target === typingArea && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
       input.focus({ preventScroll: true });
     }
   });
-
+  input.addEventListener('input', () => {
+    handleEdit(input.value);
+    try { input.setSelectionRange(input.value.length, input.value.length); } catch (_) { /* Some virtual keyboards do not expose selection ranges. */ }
+  });
+  input.addEventListener('keydown', (event) => {
+    if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+      event.preventDefault();
+      try { input.setSelectionRange(input.value.length, input.value.length); } catch (_) { /* Ignore unsupported selection APIs. */ }
+    }
+  });
   input.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       event.preventDefault();
-      resetTest({ focus: true });
-      showToast('Test restarted.');
-      return;
-    }
-    if (event.key === 'Backspace') {
-      event.preventDefault();
-      eraseCharacter();
+      resetTest({ focus: true, notify: true });
       return;
     }
     if (event.key === 'Enter' && mode !== 'code') {
       event.preventDefault();
-      addCharacter(' ');
-      return;
-    }
-    if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-      event.preventDefault();
-      addCharacter(event.key);
+      const pos = input.selectionStart;
+      const newText = typedText.slice(0, pos) + ' ' + typedText.slice(input.selectionEnd);
+      handleEdit(newText);
+      input.setSelectionRange(newText.length, newText.length);
     }
   });
-
-  // beforeinput also supports mobile and virtual keyboards that do not emit ordinary keydown events.
   input.addEventListener('beforeinput', (event) => {
-    if (event.inputType === 'insertText' && event.data) {
-      event.preventDefault();
-      for (const character of event.data) addCharacter(character);
-    } else if (event.inputType === 'deleteContentBackward') {
-      event.preventDefault();
-      eraseCharacter();
-    } else if (event.inputType === 'insertLineBreak' || event.inputType === 'insertParagraph') {
-      event.preventDefault();
-      addCharacter(mode === 'code' ? '\n' : ' ');
-    }
+    if (event.inputType === 'insertLineBreak' && mode !== 'code') event.preventDefault();
   });
-
-  el('theme-toggle').addEventListener('click', () => {
+  $('#theme-toggle').addEventListener('click', () => {
     document.body.classList.toggle('dark-theme');
-    saveSettings();
     const dark = document.body.classList.contains('dark-theme');
-    el('theme-toggle').setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+    $('#theme-toggle').setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+    saveSettings();
     showToast(dark ? 'Dark theme enabled.' : 'Light theme enabled.');
   });
 
-  // Restore saved selectors visually after event handlers are registered.
-  document.querySelectorAll('.mode-button').forEach((button) => {
+  resetTest();
+  $$('.mode-switch .segment').forEach((button) => {
     const selected = button.dataset.mode === mode;
     button.classList.toggle('selected', selected);
     button.setAttribute('aria-pressed', String(selected));
   });
-  document.querySelectorAll('.duration-button').forEach((button) => {
+  $$('.duration-switch .segment').forEach((button) => {
     const selected = Number(button.dataset.duration) === duration;
     button.classList.toggle('selected', selected);
     button.setAttribute('aria-pressed', String(selected));
   });
-  el('theme-toggle').setAttribute('aria-label', document.body.classList.contains('dark-theme') ? 'Switch to light theme' : 'Switch to dark theme');
-  resetTest();
+  $('#theme-toggle').setAttribute('aria-label', document.body.classList.contains('dark-theme') ? 'Switch to light theme' : 'Switch to dark theme');
 })();

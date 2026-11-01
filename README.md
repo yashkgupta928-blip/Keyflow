@@ -1,51 +1,41 @@
-# Keyflow — Typing Practice
+# Keyflow — Typing Studio
 
-Keyflow is a responsive, browser-based typing practice website. It uses plain HTML, CSS, and JavaScript, with no build step, framework, account, or backend. It can be hosted directly on GitHub Pages.
+A polished, responsive typing-practice website built with plain HTML, CSS, and JavaScript. Designed to publish directly on GitHub Pages: no Node.js, framework, build command, account, or backend required.
 
 ## Features
 
-- Timed tests: 15, 30, 60, and 120 seconds
-- Practice modes: common words, original quotes, and code snippets
-- Fresh randomized prompts on page visits, restarts, and every timer selection (including reselecting the active duration); the last prompt per mode is remembered locally to avoid immediate repeats
-- Live words per minute (WPM), accuracy, correct-character, and mistake counters
-- Personal best saved separately by mode and duration in your browser
-- Light/dark theme toggle; selection and theme preferences are saved locally
-- Keyboard controls, mobile-friendly input, responsive layout, and reduced-motion support
-- No ads, analytics, external APIs, or server-side data collection
+- Premium parchment, ink, and champagne color theme with a midnight dark mode
+- Words, passages, and code practice modes
+- 15, 30, 60, and 120 second sessions
+- Timer begins on the first typed character
+- Live WPM, accuracy, correct-character, and mistake counters
+- Personal bests stored locally for each mode and duration
+- Fresh practice text on page visits, resets, mode changes, and timer changes
+- Keyboard shortcuts: `Esc` starts a fresh session
+- Responsive layout for desktop and mobile
+- Local-only settings and personal records; no backend or analytics
 
 ## Run locally
 
-1. Download or extract this project.
-2. Open `index.html` in a modern browser.
+Open `index.html` in a modern browser. An internet connection is only needed for the optional Google Fonts; the system-font fallbacks work offline.
 
-A local web server is optional. If you have Python installed, open a terminal in this folder and run:
+## Publish on GitHub Pages
 
-```bash
-python3 -m http.server 8000
-```
+1. Create a GitHub repository, e.g. `keyflow-typing`.
+2. Upload `index.html`, `style.css`, `script.js`, and `README.md` directly into the repository root.
+3. Open **Settings → Pages**.
+4. Under **Build and deployment**, choose **Deploy from a branch**.
+5. Select branch `main` and folder `/(root)`, then select **Save**.
+6. Wait for deployment and open the published link shown in Settings → Pages.
 
-Then visit `http://localhost:8000`.
+The site URL typically looks like `https://YOUR-USERNAME.github.io/keyflow-typing/`.
 
-## Publish with GitHub Pages
+## Update the live site
 
-1. Sign in to GitHub and create a **new public repository** (for example, `keyflow-typing`).
-2. Upload `index.html`, `style.css`, `script.js`, and `README.md` to the repository's **root** directory. Do not upload the ZIP as the only file; GitHub Pages needs the site files themselves.
-3. Open the repository's **Settings → Pages**.
-4. Under **Build and deployment**, select **Deploy from a branch**.
-5. Select the `main` branch and `/(root)` folder, then click **Save**.
-6. Wait for the deployment to finish. GitHub will show the published URL in **Settings → Pages**. It normally follows this format: `https://YOUR-USERNAME.github.io/REPOSITORY-NAME/`.
+Upload the changed files to the same repository and commit them. GitHub Pages redeploys from the selected branch automatically. Refresh the browser with `Ctrl + Shift + R` if you see a cached version.
 
-If you use a repository named `YOUR-USERNAME.github.io`, the URL is instead `https://YOUR-USERNAME.github.io/`.
+## Files
 
-## Keyboard controls
-
-- Type the text displayed in the practice area to begin the timer.
-- `Backspace` deletes the latest typed character.
-- `Esc` resets the current test.
-- Click the practice area to focus it.
-
-## Notes
-
-- Personal bests and preferences are stored in the browser's `localStorage` on that device/browser. They do not sync between devices.
-- Google Fonts are used for the visual design. If they are unavailable, local system font fallbacks are used.
-- This project is static and designed for GitHub Pages; no GitHub Actions workflow or server is required.
+- `index.html` — semantic layout and UI
+- `style.css` — design system, light/dark themes, and responsive styling
+- `script.js` — prompt generation, timer, scoring, theme, and local records
