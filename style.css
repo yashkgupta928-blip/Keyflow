@@ -6,7 +6,7 @@
   --surface-muted: #f0ebe1;
   --ink: #202026;
   --ink-strong: #15151a;
-  --muted: #79766f;
+  --muted: #6f6b63;
   --muted-strong: #5f5c55;
   --line: #dfd9ce;
   --line-strong: #cfc6b8;
@@ -87,7 +87,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .progress-rail { height: 2px; background: var(--surface-muted); margin: 0 27px; overflow: hidden; }
 .progress-bar { height: 100%; width: 0%; background: var(--accent); transition: width .12s linear; }
 .typing-wrap { position: relative; height: 292px; min-height: 250px; overflow-y: auto; overflow-x: hidden; padding: 29px 28px 26px; outline: none; cursor: text; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
-.typing-text { position: relative; z-index: 1; color: #888175; white-space: pre-wrap; overflow-wrap: anywhere; font: 400 19px/2.05 var(--mono); letter-spacing: -.025em; user-select: none; }
+.typing-text { position: relative; z-index: 1; color: #6c665c; white-space: pre-wrap; overflow-wrap: anywhere; font: 400 19px/2.05 var(--mono); letter-spacing: -.025em; user-select: none; }
 .char { position: relative; border-radius: 2px; }
 .char.correct { color: var(--correct); }
 .char.incorrect { color: var(--incorrect); background: rgba(180,76,71,.1); text-decoration: underline; text-decoration-color: var(--incorrect); text-underline-offset: 4px; }
@@ -165,7 +165,7 @@ button { -webkit-tap-highlight-color: transparent; }
 body.dark-theme { color-scheme: dark; --bg: #171619; --surface: #201e22; --surface-raised: #2a272c; --surface-muted: #262329; --ink: #e7e2d8; --ink-strong: #f5f0e7; --muted: #aaa39a; --muted-strong: #c8c0b5; --line: #38343a; --line-strong: #51494d; --accent: #d4b17a; --accent-bright: #e4c894; --accent-soft: #342d25; --accent-ink: #2d2114; --correct: #f3ead9; --incorrect: #ff887d; --shadow: 0 18px 55px rgba(0,0,0,.18); }
 body.dark-theme .theme-moon { display: none; } body.dark-theme .theme-sun { display: block; }
 body.dark-theme .theme-toggle:hover { background: #312d31; }
-body.dark-theme .typing-text { color: #77716c; }
+body.dark-theme .typing-text { color: #a39a8e; }
 body.dark-theme .char.correct { color: var(--correct); }
 body.dark-theme .char.current { color: var(--ink-strong); }
 body.dark-theme .metric-featured { background: #302a25; border-color: #46392a; }
