@@ -195,7 +195,7 @@
     $('#state-indicator').classList.remove('finished');
     timerId = window.setInterval(() => {
       const stats = updateStats();
-      if (stats.elapsed >= duration) finishTest();
+      if (stats.elapsed >= duration) finishTest({ timeExpired: true });
     }, 80);
   }
   function handleEdit(nextText) {
@@ -218,9 +218,11 @@
     input.value = typedText;
     updateCharacterMarks();
     const stats = updateStats();
-    if (typedText.length >= targetText.length || stats.elapsed >= duration) finishTest();
+    if (typedText.length >= targetText.length || stats.elapsed >= duration) {
+      finishTest({ timeExpired: stats.elapsed >= duration });
+    }
   }
-  function finishTest() {
+  function finishTest({ timeExpired = false } = {}) {
     if (finished) return;
     finished = true;
     running = false;
@@ -230,9 +232,11 @@
     $('#test-state').textContent = 'SESSION COMPLETE';
     $('#state-indicator').classList.remove('running');
     $('#state-indicator').classList.add('finished');
-    $('#progress-fill').style.width = '100%';
-    progressRail.setAttribute('aria-valuenow', '100');
-    $('#time-label').textContent = '00:00';
+    if (timeExpired) {
+      $('#progress-fill').style.width = '100%';
+      progressRail.setAttribute('aria-valuenow', '100');
+      $('#time-label').textContent = '00:00';
+    }
     $('#final-wpm').innerHTML = `${stats.wpm} <small>WPM</small>`;
     $('#final-accuracy').innerHTML = `${stats.accuracy}<small>%</small>`;
 
@@ -251,6 +255,7 @@
       : `You typed at ${stats.wpm} WPM with ${stats.accuracy}% accuracy.`;
     overlay.hidden = false;
     input.blur();
+    overlay.focus({ preventScroll: true });
     saveSettings();
   }
   function updateBest() {
@@ -271,6 +276,7 @@
     correctKeypresses = 0;
     mistakes = 0;
     targetText = makePrompt();
+    input.maxLength = targetText.length;
     input.value = '';
     overlay.hidden = true;
     $('#test-state').textContent = 'READY WHEN YOU ARE';
@@ -322,10 +328,24 @@
   $('#again-button').addEventListener('click', () => resetTest({ focus: true }));
   typingArea.addEventListener('click', () => { if (!finished) input.focus({ preventScroll: true }); });
   typingArea.addEventListener('keydown', (event) => {
+    if (event.target === typingArea && event.key === 'Escape') {
+      event.preventDefault();
+      resetTest({ focus: true, notify: true });
+      return;
+    }
     if (event.target === typingArea && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
       input.focus({ preventScroll: true });
     }
+  });
+  input.addEventListener('paste', (event) => {
+    event.preventDefault();
+    showToast('Pasting is disabled during timed practice.');
+  });
+  typingArea.addEventListener('dragover', (event) => event.preventDefault());
+  typingArea.addEventListener('drop', (event) => {
+    event.preventDefault();
+    showToast('Dropping text is disabled during timed practice.');
   });
   input.addEventListener('input', () => {
     handleEdit(input.value);
@@ -352,6 +372,9 @@
     }
   });
   input.addEventListener('beforeinput', (event) => {
+    if (event.inputType === 'insertFromPaste' || event.inputType === 'insertFromDrop') {
+      event.preventDefault();
+    }
     if (event.inputType === 'insertLineBreak' && mode !== 'code') event.preventDefault();
   });
   $('#theme-toggle').addEventListener('click', () => {
