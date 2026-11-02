@@ -49,7 +49,7 @@
             <div class="section-index">01 <span>/</span> DAILY PRACTICE</div>
             <h2 id="studio-title">Your session</h2>
           </div>
-          <div class="session-state"><span class="state-indicator" id="state-indicator"></span><span id="test-state">READY WHEN YOU ARE</span></div>
+          <div class="session-state"><span class="state-indicator" id="state-indicator"></span><span id="test-state" aria-live="polite" aria-atomic="true">READY WHEN YOU ARE</span></div>
         </div>
 
         <div class="practice-panel">
@@ -75,15 +75,15 @@
 
           <div class="test-ruler">
             <div class="ruler-label"><span class="ruler-dash"></span><span id="mode-label">COMMON WORDS</span></div>
-            <div class="ruler-right"><span class="timer-caption">TIME LEFT</span><span class="timer-value" id="time-label">00:30</span></div>
+            <div class="ruler-right"><span class="timer-caption">TIME LEFT</span><span class="timer-value" id="time-label" aria-live="off">00:30</span></div>
           </div>
           <div class="progress-rail" role="progressbar" aria-label="Test time elapsed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar" id="progress-fill"></div></div>
 
-          <div class="typing-wrap" id="typing-area" tabindex="0" role="button" aria-label="Typing practice area. Click and begin typing.">
+          <div class="typing-wrap" id="typing-area" tabindex="0" role="group" aria-label="Typing practice area">
             <div class="typing-caret" id="typing-caret" aria-hidden="true"></div>
-            <div class="typing-text" id="typing-text" aria-hidden="true"></div>
-            <textarea id="typing-input" class="typing-input" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type the displayed practice text here" enterkeyhint="done"></textarea>
-            <div class="finished-overlay" id="finished-overlay" hidden>
+            <div class="typing-text" id="typing-text" aria-live="off"></div>
+            <textarea id="typing-input" class="typing-input" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type the displayed practice text here" aria-describedby="typing-help" aria-keyshortcuts="Escape" enterkeyhint="done"></textarea>
+            <div class="finished-overlay" id="finished-overlay" role="region" aria-labelledby="finish-title" tabindex="-1" hidden>
               <div class="finish-seal" aria-hidden="true"><span>✓</span></div>
               <div class="finish-overline">SESSION COMPLETE</div>
               <h3 id="finish-title">Well practised.</h3>
@@ -97,7 +97,7 @@
           </div>
 
           <div class="panel-footer">
-            <div class="typing-instructions"><span class="keyboard-key">esc</span><span>restart session</span><span class="instruction-dot">·</span><span>timer starts on first key</span></div>
+            <div class="typing-instructions" id="typing-help"><span class="keyboard-key">esc</span><span>restart session</span><span class="instruction-dot">·</span><span>timer starts on first key</span></div>
             <button class="restart-button" id="restart-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4.8 9a7.5 7.5 0 0 1 12.7-2L20 12M4 17v-5h5m10.2 3a7.5 7.5 0 0 1-12.7 2L4 12"/></svg> Fresh session</button>
           </div>
         </div>
