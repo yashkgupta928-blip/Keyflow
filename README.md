@@ -1,41 +1,64 @@
 # Keyflow — Typing Studio
 
-A polished, responsive typing-practice website built with plain HTML, CSS, and JavaScript. Designed to publish directly on GitHub Pages: no Node.js, framework, build command, account, or backend required.
+A lightweight, responsive typing-practice website built with plain HTML, CSS, and JavaScript. It deploys directly to GitHub Pages and has no runtime framework, backend, or build step.
 
 ## Features
 
-- Premium parchment, ink, and champagne color theme with a midnight dark mode
+- Parchment, ink, and champagne visual theme with a midnight dark mode
 - Words, passages, and code practice modes
 - 15, 30, 60, and 120 second sessions
-- Timer begins on the first typed character
+- Timer starts with the first typed character
 - Live WPM, accuracy, correct-character, and mistake counters
 - Personal bests stored locally for each mode and duration
-- Fresh practice text on page visits, resets, mode changes, and timer changes
-- Keyboard shortcuts: `Esc` starts a fresh session
-- Responsive layout for desktop and mobile
-- Local-only settings and personal records; no backend or analytics
+- Fresh prompts on page visits, resets, mode changes, and duration changes
+- Escape shortcut to restart a session
+- Responsive desktop and mobile layout
+- Local-only settings and records; no analytics or account required
 
 ## Run locally
 
-Open `index.html` in a modern browser. An internet connection is only needed for the optional Google Fonts; the system-font fallbacks work offline.
+Open `index.html` in a modern browser, or serve the repository folder:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then visit http://localhost:8000.
+
+An internet connection is only needed for optional Google Fonts. System-font fallbacks work offline.
+
+## Automated tests
+
+The browser tests use Playwright. They are development-only and are not included in the published site.
+
+Requirements: Node.js 22 or newer and npm.
+
+```bash
+npm install
+npx playwright install chromium
+npm test
+```
+
+The test suite checks page loading, mode and duration controls, typing and completion, early-finish timer state, theme persistence, keyboard restart, paste prevention, and mobile layout.
 
 ## Publish on GitHub Pages
 
-1. Create a GitHub repository, e.g. `keyflow-typing`.
-2. Upload `index.html`, `style.css`, `script.js`, and `README.md` directly into the repository root.
-3. Open **Settings → Pages**.
-4. Under **Build and deployment**, choose **Deploy from a branch**.
-5. Select branch `main` and folder `/(root)`, then select **Save**.
-6. Wait for deployment and open the published link shown in Settings → Pages.
+This repository uses GitHub Actions for deployment.
 
-The site URL typically looks like `https://YOUR-USERNAME.github.io/keyflow-typing/`.
+1. Open **Settings → Pages**.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Push changes to the `main` branch.
+4. Open the **Actions** tab and wait for the validation and deployment workflow to finish.
+5. Open the published URL shown in **Settings → Pages**.
+
+For a project repository named `Keyflow`, the URL is typically:
+
+`https://yashkgupta928-blip.github.io/Keyflow/`
 
 ## Update the live site
 
-Upload the changed files to the same repository and commit them. GitHub Pages redeploys from the selected branch automatically. Refresh the browser with `Ctrl + Shift + R` if you see a cached version.
+Commit changes to `main`. The workflow runs validation before deploying the updated static files. If an older version remains visible, refresh the page without cache (Ctrl + Shift + R).
 
-## Files
+## Privacy
 
-- `index.html` — semantic layout and UI
-- `style.css` — design system, light/dark themes, and responsive styling
-- `script.js` — prompt generation, timer, scoring, theme, and local records
+Keyflow stores preferences and personal-best scores in the browser's local storage. It does not send typing content or scores to a server.
