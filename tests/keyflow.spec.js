@@ -25,6 +25,7 @@ test('starts the timer when typing begins', async ({ page }) => {
   const input = page.locator('#typing-input');
   await input.fill('a');
   await expect(page.locator('#test-state')).toHaveText('SESSION IN PROGRESS');
+  await page.waitForTimeout(120);
   await expect(page.locator('#progress-fill')).not.toHaveCSS('width', '0px');
 });
 
@@ -33,7 +34,7 @@ test('early prompt completion does not pretend the timer expired', async ({ page
   await page.locator('#typing-input').fill(prompt);
   await expect(page.locator('#finished-overlay')).toBeVisible();
   await expect(page.locator('#time-label')).not.toHaveText('00:00');
-  await expect(page.locator('#progress-rail')).not.toHaveAttribute('aria-valuenow', '100');
+  await expect(page.locator('.progress-rail')).not.toHaveAttribute('aria-valuenow', '100');
 });
 
 test('Escape starts a fresh session', async ({ page }) => {
