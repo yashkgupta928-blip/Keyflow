@@ -1,0 +1,12 @@
+{
+  "name": "keyflow-typing-studio",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Browser tests for the Keyflow static typing practice app",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}
